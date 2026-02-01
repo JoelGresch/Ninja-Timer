@@ -1,0 +1,184 @@
+
+@font-face {
+	font-family: Lexend;
+	src: url(../font/Lexend-VariableFont_wght.ttf);
+}
+
+*{
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+	font-family: Lexend;
+}
+
+body {
+	background-color: #111;
+}
+
+#app {
+	/* width: 100vw; */
+	/* height: 100vh; */
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: start;
+	row-gap: 16px;
+	column-gap: 16px;
+	padding: 8px;
+	overflow-y: auto;
+	overflow-x: hidden;
+	/* background-color: magenta; */
+}
+
+#add-timer-btn {
+	width: 276px;
+	height: 140px;
+	color: darkcyan;
+	font-size: 2em;
+	font-weight: bold;
+	border-radius: 16px;
+	border: 4px dashed darkcyan;
+	background-color: rgba(0, 0, 0, 0);
+}
+
+#add-timer-btn:hover {
+	color: lightblue;
+	border-color: lightblue;
+}
+
+.timer {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	width: fit-content;
+	height: fit-content;
+	padding: 8px;
+	background-color: #333;
+	border: 2px solid darkcyan;
+	border-radius: 16px;
+	align-items: center;
+}
+
+.timer.alarm {
+	animation-name: alarm;
+	animation-fill-mode: both;
+	animation-direction: alternate;
+	animation-iteration-count: infinite;
+	animation-duration: 0.5s;
+}
+
+@keyframes alarm {
+	from {background-color: #333}
+	to {background-color: orange}
+  }
+
+.timer-label {
+	width: 256px;
+	border: none;
+	font-size: 2em;
+	text-align: center;
+	background-color: rgba(0, 0, 0, 0);
+	color: lightblue;
+	margin-bottom: 8px;
+	border-radius: 8px;
+}
+
+.timer-controls {
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	justify-content: space-between;
+}
+
+.timer-display {
+	display: flex;
+	color: lightblue;
+	font-size: 2em;
+	margin-right: 8px;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+.timer-digits {
+	position: relative;
+	font-size: xx-large;
+	color: lightblue;
+	width: 1.8em;
+	border-radius: 8px;
+	border: 2px solid darkcyan;
+	background-color: #222;
+}
+
+.timer-digits:disabled {
+	user-select: none;
+}
+
+.timer-minutes {
+	text-align: right;
+	animation-direction: alternate;
+}
+
+.timer-seconds {
+	text-align: left;
+	animation-direction: alternate-reverse;
+	/* font-size: xx-large;
+	color: lightblue;
+	width: 1.8em;
+	border-radius: 8px;
+	border: 2px solid darkcyan;
+	background-color: #222; */
+}
+
+.timer-digits.alarm {
+	animation-name: wiggle;
+	animation-duration: 0.25s;
+	animation-iteration-count: infinite;
+	animation-timing-function: ease-in-out;
+}
+
+@keyframes wiggle {
+	from {top: -4px;}
+	to {top: 4px;}
+}
+
+
+.timer-buttons {
+	display: flex;
+	flex-grow: 1;
+}
+
+.control-btn {
+	font-size: 1em;
+	border-width: 4px;
+	flex-grow: 1;
+}
+
+.start-btn {
+	border-top-left-radius: 8px;
+	border-bottom-left-radius: 8px;
+	background-color: greenyellow;
+	border-color: lime;
+}
+
+.pause-btn {
+	background-color: gold;
+	border-color: orange;
+}
+
+.stop-btn {
+	border-top-right-radius: 8px;
+	border-bottom-right-radius: 8px;
+	background-color: orangered;
+	border-color: red;
+}
+
+.remove-btn {
+	margin-top: 8px;
+	width: 100%;
+	border-radius: 8px;;
+	background-color: crimson;
+}
