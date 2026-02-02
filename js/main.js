@@ -122,7 +122,7 @@ function Timer() {
 	}
 	
 	self.remove = ()=> {
-		if (confirm(`Remove timer for ${self.label.value}?`)) {
+		if (self.label.value != "" ? confirm(`Remove timer for ${self.label.value}?`) : confirm(`Remove timer?`)) {
 			self.stop();
 			self.elem.remove();
 			timerList = timerList.splice(timerList.indexOf(self), 1);
