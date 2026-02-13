@@ -1,6 +1,7 @@
 
 const app = document.getElementById("app");
 const bell = document.getElementById("bell");
+const addTimerBtn = document.getElementById("add-timer-btn")
 
 
 // app.onclick = function(event) {
@@ -22,14 +23,45 @@ function formatNumber(input) {
 	
 }
 
-function addTimer(btn) {
-	timerList.push(new Timer());
-	timerList[timerList.length-1].elem.querySelector(".timer-label").focus();
+function addTimer(manual = true, label = "", minutes = null, seconds = null, state = "stopped") {
+	timerList.push(new Timer(label, minutes, seconds, state));
+	if (manual) {
+		timerList[timerList.length-1].elem.querySelector(".timer-label").focus();
+	}
 	// const newParent = document.querySelector('#new-parent');
-	app.appendChild(btn);
+	app.appendChild(addTimerBtn);
 }
 
-function Timer() {
+
+function save() {
+	if (timerList.length > 0) {
+		let saveState = []
+		
+		for (let t of timerList) {
+			saveState.push({label: t.label.value, minutes: t.minutes.value, seconds: t.seconds.value, state: t.state})
+		}
+		
+		localStorage.timerList = JSON.stringify(saveState)
+	} else {
+		localStorage.clear()
+	}
+}
+
+window.onload = load
+
+function load() {
+	if (localStorage.timerList) {
+		let loadState = JSON.parse(localStorage.timerList)
+		console.log(loadState)
+		for (let t of loadState) {
+			addTimer(false, t.label, t.minutes, t.seconds, t.state)
+		}
+		alert("Timers loaded")
+	}
+	const autosaveTicker = setInterval(save, 1000)
+}
+
+function Timer(label = "", minutes = null, seconds = null, state = "stopped") {
 	const self = this;
 	
 	// Define timer template
@@ -61,9 +93,13 @@ function Timer() {
 	self.ticker;
 	self.startTime;
 	self.endTime;
-	self.minutes = self.elem.querySelector(".timer-minutes");
-	self.seconds = self.elem.querySelector(".timer-seconds");
 	self.label = self.elem.querySelector(".timer-label");
+	self.label.value = label
+	self.minutes = self.elem.querySelector(".timer-minutes");
+	self.minutes.value = minutes
+	self.seconds = self.elem.querySelector(".timer-seconds");
+	self.seconds.value = seconds
+	self.state = state
 	
 	
 	
@@ -78,6 +114,7 @@ function Timer() {
 			self.endTime = new Date().getTime() + self.minutes.value*60*1000 + self.seconds.value*1000;
 			
 			self.ticker = setInterval(self.tick, 100);
+			self.state = "running"
 		}
 	}
 	
@@ -89,6 +126,7 @@ function Timer() {
 			self.minutes.disabled = false;
 			self.seconds.disabled = false;
 			console.log(`${self.label.value} timer paused at ${new Date().toLocaleTimeString()}`);
+			self.state = "paused"
 		}
 	}
 	
@@ -103,6 +141,7 @@ function Timer() {
 		self.elem.classList.remove("alarm");
 		self.minutes.classList.remove("alarm");
 		self.seconds.classList.remove("alarm");
+		self.state = "stopped"
 		console.log(`${self.label.value} timer stopped at ${new Date().toLocaleTimeString()}`);
 	}
 	
@@ -125,7 +164,11 @@ function Timer() {
 		if (self.label.value != "" ? confirm(`Remove timer for ${self.label.value}?`) : confirm(`Remove timer?`)) {
 			self.stop();
 			self.elem.remove();
-			timerList = timerList.splice(timerList.indexOf(self), 1);
+			if (timerList.length > 1) {
+				timerList = timerList.splice(timerList.indexOf(self), 1);
+			} else {
+				timerList = []
+			}
 		}
 		// console.log(self.elem);
 	}
@@ -135,6 +178,10 @@ function Timer() {
 	self.elem.querySelector(".pause-btn").onclick = self.pause;
 	self.elem.querySelector(".stop-btn").onclick = self.stop;
 	self.elem.querySelector(".remove-btn").onclick = self.remove;
+	
+	if (self.state == "running") {
+		self.start()
+	}
 	
 }
 
