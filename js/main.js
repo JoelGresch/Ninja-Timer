@@ -51,12 +51,15 @@ window.onload = load
 
 function load() {
 	if (localStorage.timerList) {
-		let loadState = JSON.parse(localStorage.timerList)
-		console.log(loadState)
-		for (let t of loadState) {
-			addTimer(false, t.label, t.minutes, t.seconds, t.state)
+		if (confirm("Load previous timers?")) {
+			if (localStorage.timerList) {
+				let loadState = JSON.parse(localStorage.timerList)
+				console.log(loadState)
+				for (let t of loadState) {
+					addTimer(false, t.label, t.minutes, t.seconds, t.state)
+				}
+			}
 		}
-		alert("Timers loaded")
 	}
 	const autosaveTicker = setInterval(save, 1000)
 }
